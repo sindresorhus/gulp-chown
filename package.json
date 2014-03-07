@@ -1,6 +1,6 @@
 {
   "name": "gulp-chown",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Change ownership of Vinyl files",
   "license": "MIT",
   "repository": "sindresorhus/gulp-chown",
