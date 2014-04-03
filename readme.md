@@ -1,4 +1,4 @@
-# [gulp](https://github.com/wearefractal/gulp)-chown [![Build Status](https://travis-ci.org/sindresorhus/gulp-chown.png?branch=master)](https://travis-ci.org/sindresorhus/gulp-chown)
+# [gulp](http://gulpjs.com)-chown [![Build Status](https://travis-ci.org/sindresorhus/gulp-chown.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-chown)
 
 > Change permissions of [Vinyl](https://github.com/wearefractal/vinyl) files
 
@@ -10,7 +10,7 @@ $ npm install --save-dev gulp-chown
 ```
 
 
-## Example
+## Usage
 
 ```js
 var gulp = require('gulp');
