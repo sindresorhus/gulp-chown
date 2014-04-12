@@ -17,7 +17,7 @@ var gulp = require('gulp');
 var chown = require('gulp-chown');
 
 gulp.task('default', function () {
-	gulp.src('src/app.js')
+	return gulp.src('src/app.js')
 		.pipe(chown('sindresorhus'))
 		.pipe(gulp.dest('dist'));
 });
