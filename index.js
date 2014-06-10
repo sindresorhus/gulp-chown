@@ -2,6 +2,7 @@
 var gutil = require('gulp-util');
 var through = require('through2');
 var uidNumber = require('uid-number');
+var defaultMode = 511 & (~process.umask()); // 511 = 0777
 
 module.exports = function (user, group) {
 	var firstFile = true;
@@ -18,6 +19,9 @@ module.exports = function (user, group) {
 			this.emit('error', new gutil.PluginError('gulp-chmod', 'Streaming not supported'));
 			return cb();
 		}
+
+		file.stat = file.stat || {};
+		file.stat.mode = file.stat.mode || defaultMode;
 
 		var finish = function () {
 			file.stat.uid = finalUid != null ? finalUid : file.stat.uid;
