@@ -33,7 +33,7 @@ module.exports = function (user, group) {
 		if (firstFile && typeof user === 'string') {
 			uidNumber(user, group, function (err, uid, gid) {
 				if (err) {
-					this.emit('error', new gutil.PluginError('gulp-chmod', err));
+					this.emit('error', new gutil.PluginError('gulp-chmod', err, {fileName: file.path}));
 					return cb();
 				}
 
