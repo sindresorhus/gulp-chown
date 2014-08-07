@@ -15,11 +15,6 @@ module.exports = function (user, group) {
 			return cb();
 		}
 
-		if (file.isStream()) {
-			this.emit('error', new gutil.PluginError('gulp-chmod', 'Streaming not supported'));
-			return cb();
-		}
-
 		file.stat = file.stat || {};
 		file.stat.mode = file.stat.mode || defaultMode;
 
