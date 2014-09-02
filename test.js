@@ -1,7 +1,7 @@
 'use strict';
 var assert = require('assert');
 var gutil = require('gulp-util');
-var chown = require('./index');
+var chown = require('./');
 
 it('should chown files', function (cb) {
 	var stream = chown(501, 20);

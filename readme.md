@@ -5,7 +5,7 @@
 
 ## Install
 
-```bash
+```sh
 $ npm install --save-dev gulp-chown
 ```
 
@@ -30,7 +30,7 @@ var gulp = require('gulp');
 var chown = require('gulp-chown');
 
 gulp.task('default', function () {
-	gulp.src('src/app.js')
+	return gulp.src('src/app.js')
 		.pipe(chown(501))
 		.pipe(gulp.dest('dist'));
 });
@@ -46,13 +46,13 @@ Arguments must be of the same type.
 #### userId
 
 *Required*  
-Type: `String`, `Number`
+Type: `string`, `number`
 
 The user name or [user id](https://en.wikipedia.org/wiki/User_identifier) to change ownership to.
 
 #### userId
 
-Type: `String`, `Number`
+Type: `string`, `number`
 
 The group name or [group id](https://en.wikipedia.org/wiki/Group_identifier) to change ownership to.
 
@@ -69,7 +69,7 @@ var chown = require('gulp-chown');
 var filter = gFilter('src/vendor-*.js');
 
 gulp.task('default', function () {
-	gulp.src('src/*.js')
+	return gulp.src('src/*.js')
 		// filter a subset of the files
 		.pipe(filter)
 		// change ownership of them
@@ -83,4 +83,4 @@ gulp.task('default', function () {
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT) © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](http://sindresorhus.com)
