@@ -1,11 +1,11 @@
-# [gulp](http://gulpjs.com)-chown [![Build Status](https://travis-ci.org/sindresorhus/gulp-chown.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-chown)
+# gulp-chown [![Build Status](https://travis-ci.org/sindresorhus/gulp-chown.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-chown)
 
 > Change permissions of [Vinyl](https://github.com/wearefractal/vinyl) files
 
 
 ## Install
 
-```sh
+```
 $ npm install --save-dev gulp-chown
 ```
 
