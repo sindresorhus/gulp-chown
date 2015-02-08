@@ -22,11 +22,11 @@ it('should chown files', function (cb) {
 });
 
 it('should chown files using a username', function (cb) {
-	var stream = chown('root');
+	var stream = chown(process.env.TRAVIS ? 'travis' : 'root');
 
 	stream.on('data', function (file) {
-		assert.strictEqual(file.stat.uid, 0);
-		assert.strictEqual(file.stat.gid, 0);
+		assert.strictEqual(file.stat.uid, process.env.TRAVIS ? 1000 : 0);
+		assert.strictEqual(file.stat.gid, process.env.TRAVIS ? 1000 : 0);
 		cb();
 	});
 
