@@ -12,7 +12,7 @@ module.exports = function (user, group) {
 	var finalGid = typeof cachedGid === 'number' ? cachedGid : typeof group === 'number' ? group : null;
 
 	return through.obj(function (file, enc, cb) {
-		if (file.isNull()) {
+		if (file.isNull() && ! file.isDirectory()) {
 			cb(null, file);
 			return;
 		}
