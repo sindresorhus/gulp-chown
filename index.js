@@ -3,13 +3,13 @@ var gutil = require('gulp-util');
 var through = require('through2');
 var uidNumber = require('uid-number');
 var defaultMode = 511 & (~process.umask()); // 511 = 0777
-var cachedUid;
-var cachedGid;
+var uidCache = {};
+var gidCache = {};
 
 module.exports = function (user, group) {
 	var firstFile = true;
-	var finalUid = typeof cachedUid === 'number' ? cachedUid : typeof user === 'number' ? user : null;
-	var finalGid = typeof cachedGid === 'number' ? cachedGid : typeof group === 'number' ? group : null;
+	var finalUid = typeof uidCache[user] === 'number' ? uidCache[user] : (typeof user === 'number' ? user : null);
+	var finalGid = typeof gidCache[group] === 'number' ? gidCache[group] : (typeof group === 'number' ? group : null);
 
 	return through.obj(function (file, enc, cb) {
 		if (file.isNull() && !file.isDirectory()) {
@@ -33,8 +33,8 @@ module.exports = function (user, group) {
 					return;
 				}
 
-				cachedUid = finalUid = uid;
-				cachedGid = finalGid = gid;
+				uidCache[user] = finalUid = uid;
+				gidCache[group] = finalGid = gid;
 
 				finish();
 			});
