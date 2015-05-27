@@ -12,7 +12,7 @@ module.exports = function (user, group) {
 	var finalGid = typeof cachedGid === 'number' ? cachedGid : typeof group === 'number' ? group : null;
 
 	return through.obj(function (file, enc, cb) {
-		if (file.isNull()) {
+		if (file.isNull() && !file.isDirectory()) {
 			cb(null, file);
 			return;
 		}
@@ -29,7 +29,7 @@ module.exports = function (user, group) {
 		if (firstFile && typeof user === 'string' && finalUid === null && finalGid === null) {
 			uidNumber(user, group, function (err, uid, gid) {
 				if (err) {
-					cb(new gutil.PluginError('gulp-chmod', err, {fileName: file.path}));
+					cb(new gutil.PluginError('gulp-chown', err, {fileName: file.path}));
 					return;
 				}
 
