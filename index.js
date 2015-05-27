@@ -1,6 +1,5 @@
 'use strict';
 var gutil = require('gulp-util');
-var fs = require('fs');
 var through = require('through2');
 var uidNumber = require('uid-number');
 var defaultMode = 511 & (~process.umask()); // 511 = 0777
