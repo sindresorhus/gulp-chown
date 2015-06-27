@@ -50,7 +50,7 @@ Type: `string`, `number`
 
 The user name or [user id](https://en.wikipedia.org/wiki/User_identifier) to change ownership to.
 
-#### userId
+#### groupId
 
 Type: `string`, `number`
 
