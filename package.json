@@ -1,7 +1,7 @@
 {
   "name": "gulp-chown",
   "version": "1.0.3",
-  "description": "Change ownership of Vinyl files",
+  "description": "Change owner of Vinyl files",
   "license": "MIT",
   "repository": "sindresorhus/gulp-chown",
   "author": {
@@ -26,11 +26,12 @@
     "vinyl",
     "stream",
     "permissions",
-    "owner"
+    "owner",
+    "ownership"
   ],
   "dependencies": {
     "gulp-util": "^3.0.0",
-    "through2": "^0.6.1",
+    "through2": "^2.0.0",
     "uid-number": "0.0.6"
   },
   "devDependencies": {
