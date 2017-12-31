@@ -1,17 +1,18 @@
 'use strict';
-var gutil = require('gulp-util');
-var through = require('through2');
-var uidNumber = require('uid-number');
-var defaultMode = 511 & (~process.umask()); // 511 = 0777
-var uidCache = {};
-var gidCache = {};
+const through = require('through2');
+const uidNumber = require('uid-number');
+const PluginError = require('plugin-error');
 
-module.exports = function (user, group) {
-	var firstFile = true;
-	var finalUid = typeof uidCache[user] === 'number' ? uidCache[user] : (typeof user === 'number' ? user : null);
-	var finalGid = typeof gidCache[group] === 'number' ? gidCache[group] : (typeof group === 'number' ? group : null);
+const defaultMode = 511 & (~process.umask()); // 511 = 0777
+const uidCache = {};
+const gidCache = {};
 
-	return through.obj(function (file, enc, cb) {
+module.exports = (user, group) => {
+	let firstFile = true;
+	let finalUid = typeof uidCache[user] === 'number' ? uidCache[user] : (typeof user === 'number' ? user : null);
+	let finalGid = typeof gidCache[group] === 'number' ? gidCache[group] : (typeof group === 'number' ? group : null);
+
+	return through.obj((file, enc, cb) => {
 		if (file.isNull() && !file.isDirectory()) {
 			cb(null, file);
 			return;
@@ -21,20 +22,23 @@ module.exports = function (user, group) {
 		file.stat.mode = file.stat.mode || defaultMode;
 
 		function finish() {
-			file.stat.uid = finalUid != null ? finalUid : file.stat.uid;
-			file.stat.gid = finalGid != null ? finalGid : file.stat.gid;
+			file.stat.uid = finalUid === null ? file.stat.uid : finalUid;
+			file.stat.gid = finalGid === null ? file.stat.gid : finalGid;
 			cb(null, file);
 		}
 
 		if (firstFile && typeof user === 'string' && finalUid === null && finalGid === null) {
-			uidNumber(user, group, function (err, uid, gid) {
+			uidNumber(user, group, (err, uid, gid) => {
 				if (err) {
-					cb(new gutil.PluginError('gulp-chown', err, {fileName: file.path}));
+					cb(new PluginError('gulp-chown', err, {fileName: file.path}));
 					return;
 				}
 
-				uidCache[user] = finalUid = uid;
-				gidCache[group] = finalGid = gid;
+				finalUid = uid;
+				uidCache[user] = finalUid;
+
+				finalGid = gid;
+				gidCache[group] = finalGid;
 
 				finish();
 			});

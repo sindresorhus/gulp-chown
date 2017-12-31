@@ -16,11 +16,11 @@ $ npm install --save-dev gulp-chown
 const gulp = require('gulp');
 const chown = require('gulp-chown');
 
-gulp.task('default', () => {
-	return gulp.src('src/app.js')
+gulp.task('default', () =>
+	gulp.src('src/app.js')
 		.pipe(chown('sindresorhus'))
-		.pipe(gulp.dest('dist'));
-});
+		.pipe(gulp.dest('dist'))
+);
 ```
 
 or
@@ -29,11 +29,11 @@ or
 const gulp = require('gulp');
 const chown = require('gulp-chown');
 
-gulp.task('default', () => {
-	return gulp.src('src/app.js')
+gulp.task('default', () =>
+	gulp.src('src/app.js')
 		.pipe(chown(501))
-		.pipe(gulp.dest('dist'));
-});
+		.pipe(gulp.dest('dist'))
+);
 ```
 
 
@@ -45,14 +45,14 @@ Arguments must be of the same type.
 
 #### userId
 
-*Required*  
-Type: `string`, `number`
+*Required*
+Type: `string` `number`
 
 The user name or [user id](https://en.wikipedia.org/wiki/User_identifier) to change ownership to.
 
 #### groupId
 
-Type: `string`, `number`
+Type: `string` `number`
 
 The group name or [group id](https://en.wikipedia.org/wiki/Group_identifier) to change ownership to.
 
@@ -68,16 +68,16 @@ const chown = require('gulp-chown');
 
 const filter = gFilter('src/vendor-*.js');
 
-gulp.task('default', () => {
-	return gulp.src('src/*.js')
-		// filter a subset of the files
+gulp.task('default', () =>
+	gulp.src('src/*.js')
+		// Filter a subset of the files
 		.pipe(filter)
-		// change ownership of them
+		// Change ownership of them
 		.pipe(chown('sindresorhus'))
-		// bring back the previously filtered out files
+		// Bring back the previously filtered out files
 		.pipe(filter.restore())
-		.pipe(gulp.dest('dist'));
-});
+		.pipe(gulp.dest('dist'))
+);
 ```
 
 
@@ -88,4 +88,4 @@ gulp.task('default', () => {
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)
