@@ -26,8 +26,8 @@ it('chown files using a username', cb => {
 	const stream = chown(process.env.TRAVIS ? 'travis' : 'root');
 
 	stream.on('data', file => {
-		assert.strictEqual(file.stat.uid, process.env.TRAVIS ? 1000 : 0);
-		assert.strictEqual(file.stat.gid, process.env.TRAVIS ? 1000 : 0);
+		assert.strictEqual(file.stat.uid, process.env.TRAVIS ? 2000 : 0);
+		assert.strictEqual(file.stat.gid, process.env.TRAVIS ? 2000 : 0);
 		cb();
 	});
 
