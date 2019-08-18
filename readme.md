@@ -16,7 +16,7 @@ $ npm install --save-dev gulp-chown
 const gulp = require('gulp');
 const chown = require('gulp-chown');
 
-gulp.task('default', () =>
+exports.default = () => (
 	gulp.src('src/app.js')
 		.pipe(chown('sindresorhus'))
 		.pipe(gulp.dest('dist'))
@@ -29,7 +29,7 @@ or
 const gulp = require('gulp');
 const chown = require('gulp-chown');
 
-gulp.task('default', () =>
+exports.default = () => (
 	gulp.src('src/app.js')
 		.pipe(chown(501))
 		.pipe(gulp.dest('dist'))
@@ -46,13 +46,13 @@ Arguments must be of the same type.
 #### userId
 
 *Required*
-Type: `string` `number`
+Type: `string | number`
 
 The user name or [user id](https://en.wikipedia.org/wiki/User_identifier) to change ownership to.
 
 #### groupId
 
-Type: `string` `number`
+Type: `string | number`
 
 The group name or [group id](https://en.wikipedia.org/wiki/Group_identifier) to change ownership to.
 
@@ -68,7 +68,7 @@ const chown = require('gulp-chown');
 
 const filter = gFilter('src/vendor-*.js');
 
-gulp.task('default', () =>
+exports.default = () => (
 	gulp.src('src/*.js')
 		// Filter a subset of the files
 		.pipe(filter)
@@ -84,8 +84,3 @@ gulp.task('default', () =>
 ## Related
 
 - [gulp-chmod](https://github.com/sindresorhus/gulp-chmod) - Change permissions of Vinyl files
-
-
-## License
-
-MIT © [Sindre Sorhus](https://sindresorhus.com)

@@ -12,9 +12,9 @@ module.exports = (user, group) => {
 	let finalUid = typeof uidCache[user] === 'number' ? uidCache[user] : (typeof user === 'number' ? user : null);
 	let finalGid = typeof gidCache[group] === 'number' ? gidCache[group] : (typeof group === 'number' ? group : null);
 
-	return through.obj((file, enc, cb) => {
+	return through.obj((file, encoding, callback) => {
 		if (file.isNull() && !file.isDirectory()) {
-			cb(null, file);
+			callback(null, file);
 			return;
 		}
 
@@ -24,13 +24,13 @@ module.exports = (user, group) => {
 		function finish() {
 			file.stat.uid = finalUid === null ? file.stat.uid : finalUid;
 			file.stat.gid = finalGid === null ? file.stat.gid : finalGid;
-			cb(null, file);
+			callback(null, file);
 		}
 
 		if (firstFile && typeof user === 'string' && finalUid === null && finalGid === null) {
-			uidNumber(user, group, (err, uid, gid) => {
-				if (err) {
-					cb(new PluginError('gulp-chown', err, {fileName: file.path}));
+			uidNumber(user, group, (error, uid, gid) => {
+				if (error) {
+					callback(new PluginError('gulp-chown', error, {fileName: file.path}));
 					return;
 				}
 
