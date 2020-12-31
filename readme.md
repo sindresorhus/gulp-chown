@@ -1,4 +1,4 @@
-# gulp-chown [![Build Status](https://travis-ci.org/sindresorhus/gulp-chown.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-chown)
+# gulp-chown
 
 > [Change owner](https://en.wikipedia.org/wiki/Chown) of [Vinyl](https://github.com/gulpjs/vinyl) files
 
