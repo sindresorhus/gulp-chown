@@ -21,26 +21,23 @@ test('chown files', async t => {
 	t.is(file.stat.gid, 20);
 });
 
-test.failing('chown files using a username', async t => {
-	if ('CI' in process.env) {
-		t.pass();
-		return;
-	}
+if (!('CI' in process.env)) {
+	test.failing('chown files using a username', async t => {
+		const username = 'root';
+		const expectedUid = 0;
+		const expectedGid = 0;
 
-	const username = 'root';
-	const expectedUid = 0;
-	const expectedGid = 0;
+		const stream = chown(username);
+		stream.end(new Vinyl({
+			stat: {
+				uid: 400,
+				gid: 10,
+			},
+			contents: Buffer.from(''),
+		}));
 
-	const stream = chown(username);
-	stream.end(new Vinyl({
-		stat: {
-			uid: 400,
-			gid: 10,
-		},
-		contents: Buffer.from(''),
-	}));
-
-	const file = await pEvent(stream, 'data');
-	t.is(file.stat.uid, expectedUid);
-	t.is(file.stat.gid, expectedGid);
-});
+		const file = await pEvent(stream, 'data');
+		t.is(file.stat.uid, expectedUid);
+		t.is(file.stat.gid, expectedGid);
+	});
+}
