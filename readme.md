@@ -2,21 +2,19 @@
 
 > [Change owner](https://en.wikipedia.org/wiki/Chown) of [Vinyl](https://github.com/gulpjs/vinyl) files
 
-
 ## Install
 
+```sh
+npm install --save-dev gulp-chown
 ```
-$ npm install --save-dev gulp-chown
-```
-
 
 ## Usage
 
 ```js
-const gulp = require('gulp');
-const chown = require('gulp-chown');
+import gulp from 'gulp';
+import chown from 'gulp-chown';
 
-exports.default = () => (
+export default () => (
 	gulp.src('src/app.js')
 		.pipe(chown('sindresorhus'))
 		.pipe(gulp.dest('dist'))
@@ -26,26 +24,25 @@ exports.default = () => (
 or
 
 ```js
-const gulp = require('gulp');
-const chown = require('gulp-chown');
+import gulp from 'gulp';
+import chown from 'gulp-chown';
 
-exports.default = () => (
+export default () => (
 	gulp.src('src/app.js')
 		.pipe(chown(501))
 		.pipe(gulp.dest('dist'))
 );
 ```
 
-
 ## API
 
 ### chown(userId, groupId)
 
-Arguments must be of the same type.
+The arguments must be of the same type.
 
 #### userId
 
-*Required*
+*Required*\
 Type: `string | number`
 
 The user name or [user id](https://en.wikipedia.org/wiki/User_identifier) to change ownership to.
@@ -56,19 +53,18 @@ Type: `string | number`
 
 The group name or [group id](https://en.wikipedia.org/wiki/Group_identifier) to change ownership to.
 
-
 ## Tip
 
 Combine it with [gulp-filter](https://github.com/sindresorhus/gulp-filter) to only change ownership of a subset of the files.
 
 ```js
-const gulp = require('gulp');
-const gFilter = require('gulp-filter');
-const chown = require('gulp-chown');
+import gulp from 'gulp';
+import chown from 'gulp-chown';
+import gFilter from 'gulp-filter';
 
 const filter = gFilter('src/vendor-*.js');
 
-exports.default = () => (
+export default () => (
 	gulp.src('src/*.js')
 		// Filter a subset of the files
 		.pipe(filter)
@@ -79,7 +75,6 @@ exports.default = () => (
 		.pipe(gulp.dest('dist'))
 );
 ```
-
 
 ## Related
 

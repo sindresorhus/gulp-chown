@@ -1,52 +1,43 @@
-'use strict';
-const through = require('through2');
-const uidNumber = require('uid-number');
-const PluginError = require('plugin-error');
+import process from 'node:process';
+import uidNumber_ from 'uid-number';
+import {gulpPlugin} from 'gulp-plugin-extras';
+import pify from 'pify';
 
-const defaultMode = 511 & (~process.umask()); // 511 = 0777
+const uidNumber = pify(uidNumber_, {multiArgs: true});
+
+const defaultMode = 0o777 & (~process.umask()); // eslint-disable-line no-bitwise
 const uidCache = {};
 const gidCache = {};
 
-module.exports = (user, group) => {
-	let firstFile = true;
-	let finalUid = typeof uidCache[user] === 'number' ? uidCache[user] : (typeof user === 'number' ? user : null);
-	let finalGid = typeof gidCache[group] === 'number' ? gidCache[group] : (typeof group === 'number' ? group : null);
+export default function gulpChown(user, group) {
+	let isFirstFile = true;
+	let finalUid = typeof uidCache[user] === 'number' ? uidCache[user] : (typeof user === 'number' ? user : undefined);
+	let finalGid = typeof gidCache[group] === 'number' ? gidCache[group] : (typeof group === 'number' ? group : undefined);
 
-	return through.obj((file, encoding, callback) => {
-		if (file.isNull() && !file.isDirectory()) {
-			callback(null, file);
-			return;
+	return gulpPlugin('gulp-chown', async file => {
+		file.stat = file.stat ?? {};
+		file.stat.mode = file.stat.mode ?? defaultMode;
+
+		if (isFirstFile && typeof user === 'string' && finalUid === undefined && finalGid === undefined) {
+			let result;
+			try {
+				result = await uidNumber(user, group);
+			} catch (error) {
+				throw error[0];
+			}
+
+			finalUid = result.uid;
+			uidCache[user] = finalUid;
+
+			finalGid = result.gid;
+			gidCache[group] = finalGid;
+
+			isFirstFile = false;
 		}
 
-		file.stat = file.stat || {};
-		file.stat.mode = file.stat.mode || defaultMode;
+		file.stat.uid = finalUid ?? file.stat.uid;
+		file.stat.gid = finalGid ?? file.stat.gid;
 
-		function finish() {
-			file.stat.uid = finalUid === null ? file.stat.uid : finalUid;
-			file.stat.gid = finalGid === null ? file.stat.gid : finalGid;
-			callback(null, file);
-		}
-
-		if (firstFile && typeof user === 'string' && finalUid === null && finalGid === null) {
-			uidNumber(user, group, (error, uid, gid) => {
-				if (error) {
-					callback(new PluginError('gulp-chown', error, {fileName: file.path}));
-					return;
-				}
-
-				finalUid = uid;
-				uidCache[user] = finalUid;
-
-				finalGid = gid;
-				gidCache[group] = finalGid;
-
-				finish();
-			});
-
-			firstFile = false;
-			return;
-		}
-
-		finish();
-	});
-};
+		return file;
+	}, {supportsDirectories: true});
+}

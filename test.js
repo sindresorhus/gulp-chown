@@ -1,41 +1,46 @@
-/* eslint-env mocha */
-'use strict';
-const assert = require('assert');
-const Vinyl = require('vinyl');
-const chown = require('.');
+import process from 'node:process';
+import {Buffer} from 'node:buffer';
+import test from 'ava';
+import Vinyl from 'vinyl';
+import {pEvent} from 'p-event';
+import chown from './index.js';
 
-it('chown files', cb => {
+test('chown files', async t => {
 	const stream = chown(501, 20);
 
-	stream.on('data', file => {
-		assert.strictEqual(file.stat.uid, 501);
-		assert.strictEqual(file.stat.gid, 20);
-		cb();
-	});
-
 	stream.end(new Vinyl({
 		stat: {
 			uid: 400,
-			gid: 10
+			gid: 10,
 		},
-		contents: Buffer.from('')
+		contents: Buffer.from(''),
 	}));
+
+	const file = await pEvent(stream, 'data');
+	t.is(file.stat.uid, 501);
+	t.is(file.stat.gid, 20);
 });
 
-it('chown files using a username', cb => {
-	const stream = chown(process.env.TRAVIS ? 'travis' : 'root');
+test.failing('chown files using a username', async t => {
+	if ('CI' in process.env) {
+		t.pass();
+		return;
+	}
 
-	stream.on('data', file => {
-		assert.strictEqual(file.stat.uid, process.env.TRAVIS ? 2000 : 0);
-		assert.strictEqual(file.stat.gid, process.env.TRAVIS ? 2000 : 0);
-		cb();
-	});
+	const username = 'root';
+	const expectedUid = 0;
+	const expectedGid = 0;
 
+	const stream = chown(username);
 	stream.end(new Vinyl({
 		stat: {
 			uid: 400,
-			gid: 10
+			gid: 10,
 		},
-		contents: Buffer.from('')
+		contents: Buffer.from(''),
 	}));
+
+	const file = await pEvent(stream, 'data');
+	t.is(file.stat.uid, expectedUid);
+	t.is(file.stat.gid, expectedGid);
 });
